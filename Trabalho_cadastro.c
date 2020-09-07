@@ -3,10 +3,7 @@
 #include<stdlib.h>
 
 /*  Comentários:
-
 1- Separar componentes por espaço
-
-
 */
 
 int adiciona();
@@ -22,10 +19,8 @@ int fecha_arquivo();
 
 //int altera();
 //int pesquisa();
-
 //int exclui();
 //int confere();
-
 //int fechar_prog();
 //int limpa_nome();
 //int limpa_email();
