@@ -71,43 +71,7 @@ int main()
     }
 }
 
-int ordena()
-{
-    int i, j, auxIds;
-    char auxNome[50];
-    char auxEmail[50];
-    char auxTel[20];
 
-    for(j = 0; j < linhas; j++)
-    {
-        for(i = 0; i < (linhas - 1); i++)
-        {
-            if(Ids[i] > Ids[i+1])
-            {
-                auxIds = Ids[i];
-                Ids[i] = Ids[i+1];
-                Ids[i+1] = auxIds;
-
-                strcpy(auxNome,nomes[i]);
-                //auxNome = nomes[i];
-                strcpy(nomes[i],nomes[i+1]);
-                //nomes[i] = nomes[i+1];
-                strcpy(nomes[i+1],auxNome);
-                //nomes[i+1] = auxNome;
-                
-                strcpy(auxEmail,emails[i]);
-                //auxEmail = emails[i];
-                strcpy(emails[i],emails[i+1]);
-                strcpy(emails[i+1],auxEmail);
-                
-                strcpy(auxTel,telefones[i]);
-                //auxTel = telefones[i];
-                strcpy(telefones[i],telefones[i+1]);
-                strcpy(telefones[i+1],auxTel);
-            }
-        }
-    }
-}
 
 void cria_abre()
 {
@@ -174,6 +138,44 @@ int aloca(int qnt)
         nomes[0]= (char*)malloc(sizeof(char)*50);
         emails[0]= (char*)malloc(sizeof(char)*50);
         telefones[0]= (char*)malloc(sizeof(char)*12);
+    }
+}
+
+int ordena()
+{
+    int i, j, auxIds;
+    char auxNome[50];
+    char auxEmail[50];
+    char auxTel[20];
+
+    for(j = 0; j < linhas; j++)
+    {
+        for(i = 0; i < (linhas - 1); i++)
+        {
+            if(Ids[i] > Ids[i+1])
+            {
+                auxIds = Ids[i];
+                Ids[i] = Ids[i+1];
+                Ids[i+1] = auxIds;
+
+                strcpy(auxNome,nomes[i]);
+                //auxNome = nomes[i];
+                strcpy(nomes[i],nomes[i+1]);
+                //nomes[i] = nomes[i+1];
+                strcpy(nomes[i+1],auxNome);
+                //nomes[i+1] = auxNome;
+                
+                strcpy(auxEmail,emails[i]);
+                //auxEmail = emails[i];
+                strcpy(emails[i],emails[i+1]);
+                strcpy(emails[i+1],auxEmail);
+                
+                strcpy(auxTel,telefones[i]);
+                //auxTel = telefones[i];
+                strcpy(telefones[i],telefones[i+1]);
+                strcpy(telefones[i+1],auxTel);
+            }
+        }
     }
 }
 
