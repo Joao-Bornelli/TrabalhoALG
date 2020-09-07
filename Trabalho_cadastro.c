@@ -26,6 +26,7 @@ int fecha_arquivo();
 //int limpa_email();
 //int limpa_telefone();
 
+
 int linhas;
 
 FILE *arquivo;
