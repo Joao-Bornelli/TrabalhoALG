@@ -3,10 +3,7 @@
 #include<stdlib.h>
 
 /*  Comentários:
-
 1- Separar componentes por espaço
-
-
 */
 
 int adiciona();
