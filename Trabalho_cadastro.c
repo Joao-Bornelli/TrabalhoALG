@@ -4,6 +4,9 @@
 
 /*  Comentários:
 1- Separar componentes por espaço
+2- Conferir email (@ e .com)
+3- Nome em caixa alta
+
 */
 
 int adiciona();
@@ -16,15 +19,14 @@ void cria_abre();
 int conta_linhas();
 int aloca(int qnt);
 int fecha_arquivo();
+int limpa_nome(int opcao);
 
 //int altera();
 //int pesquisa();
 //int exclui();
-//int confere();
-//int fechar_prog();
+
 //int limpa_nome();
-//int limpa_email();
-//int limpa_telefone();
+//int verif_email();
 
 
 int linhas;
@@ -43,6 +45,7 @@ int main()
     conta_linhas();
     aloca(linhas);
     fecha_arquivo();
+
     while(opcao != 0)
     {
         opcao = menu();
@@ -50,19 +53,20 @@ int main()
         switch (opcao)
         {
         case 0:
+            fecha_arquivo(0);
             return 0;
         case 1:
             adiciona();
             break;
         case 2:
-      //  altera();
+            //altera();
             encontrar();
             break;
         case 3:
-      //  pesquisa();
+            //pesquisa();
             break;
         case 4:
-      //exclui();
+            //exclui();
             break;
         case 5:
             lista();
@@ -135,9 +139,10 @@ int aloca(int qnt)
         nomes = malloc(sizeof(int)*1);
         emails = malloc(sizeof(int)*1);
         telefones = malloc(sizeof(int)*1);
-        nomes[0]= (char*)malloc(sizeof(char)*50);
-        emails[0]= (char*)malloc(sizeof(char)*50);
-        telefones[0]= (char*)malloc(sizeof(char)*12);
+
+        nomes[0] = (char*)malloc(sizeof(char)*50);
+        emails[0] = (char*)malloc(sizeof(char)*50);
+        telefones[0] = (char*)malloc(sizeof(char)*12);
     }
 }
 
@@ -186,6 +191,7 @@ int adiciona()
     int x = 0;
     int index = 0;
     printf("-----Adiciona-----\n");
+
     cria_abre();
     conta_linhas();
     if(linhas > 0)
@@ -196,7 +202,7 @@ int adiciona()
         {
             if(Ids[i] > (Ids[i-1]+1))
             {
-                printf("----IDS I %d----\n", Ids[i]);
+                //printf("----IDS I %d----\n", Ids[i]);
                 x = i;
                 break;
             }
@@ -204,44 +210,45 @@ int adiciona()
         if(x > 0)
         {
             Ids[x] = Ids[x-1] + 1;
-            printf("----IDS X %d----\n", Ids[x-1]+1);
+            //printf("----IDS X %d----\n", Ids[x-1]+1);
             strcpy(nomes[x],"leandro");
             strcpy(emails[x],"xxxxxxx@xxxx.com");
             strcpy(telefones[x], "01010101");
+            limpa_nome(x);
 
-            fprintf(arquivo,"%d ",Ids[x]);
+            fprintf(arquivo,"%d ", Ids[x]);
             //fprintf(arquivo,",");
-            fprintf(arquivo,"%s ",nomes[x]);
+            fprintf(arquivo,"%s ", nomes[x]);
             //fprintf(arquivo,",");
-            fprintf(arquivo,"%s ",emails[x]);
+            fprintf(arquivo,"%s ", emails[x]);
             //fprintf(arquivo,",");
-            fprintf(arquivo,"%s\n",telefones[x]);
+            fprintf(arquivo,"%s\n", telefones[x]);
         }
         else
         {
             index = linhas;
             Ids[index]= index+1;
-            printf("----IDS Linhas %d -- %d----\n", Ids[index],index);
+           // printf("----IDS Linhas %d -- %d----\n", Ids[index],index);
             strcpy(nomes[index],"leandro");
             strcpy(emails[index],"xxxxxxx@xxxx.com");
             strcpy(telefones[index], "01010101");
+            limpa_nome(index);
 
-            fprintf(arquivo,"%d ",Ids[index]);
+            fprintf(arquivo,"%d ", Ids[index]);
             //fprintf(arquivo,",");
-            fprintf(arquivo,"%s ",nomes[index]);
+            fprintf(arquivo,"%s ", nomes[index]);
             //fprintf(arquivo,",");
-            fprintf(arquivo,"%s ",emails[index]);
+            fprintf(arquivo,"%s ", emails[index]);
             //fprintf(arquivo,",");
-            fprintf(arquivo,"%s\n",telefones[index]);
+            fprintf(arquivo,"%s\n", telefones[index]);
         }
     }
     else
-    {   
-        printf("---%d---\n",linhas);
-    
+    {       
         Ids[0] = 1;
         fprintf(arquivo,"%d ",Ids[0]);        
         strcpy(nomes[0],"leandro");
+        limpa_nome(0);
         fprintf(arquivo,"%s ",nomes[0]);
         strcpy(emails[0],"xxxxxxx@xxxx.com");
         fprintf(arquivo,"%s ",emails[0]);
@@ -250,11 +257,6 @@ int adiciona()
     }
     fecha_arquivo();
 }
-
-
-
-
-
 
 int fecha_arquivo()
 {
@@ -318,6 +320,7 @@ int encontrar()
 int lista()
 {
     cria_abre();
+    conta_linhas();
     if(linhas > 0)
     {
         int i;
@@ -333,5 +336,21 @@ int lista()
     {
         printf("\nNão existe nenhum cliente cadastrado!\n");
     }
+
     fecha_arquivo();
+}
+
+int limpa_nome(int opcao)
+{
+    int i;
+    
+    for(i = 0; i < 50; i++)
+    {
+        if(nomes[opcao][i] > 96 && nomes[opcao][i] < 123)   
+        {
+            nomes[opcao][i] = nomes[opcao][i] - 32;
+        }
+    }
+    
+    printf("\n\nchar: %s\n", nomes[opcao]);
 }
