@@ -76,7 +76,6 @@ int main()
             lista();
             break;
         }
-        libera_mem();
     }
 }
 
@@ -304,6 +303,7 @@ int adiciona()
         //fprintf(arquivo,",");
         fprintf(arquivo,"%s\n", telefones[0]);
     }
+    libera_mem();
     fecha_arquivo();
     printf("Contato adicionado com sucesso.\n");
 }
@@ -338,6 +338,11 @@ int menu ()
 
 int encontrar()
 {
+    cria_abre();
+    aloca(0);
+    conta_linhas();
+    aloca(linhas);
+
     int escolha;
     printf("Digite o tipo de informação a ser buscada:\n");
     printf("1 - Id\n");
@@ -367,17 +372,21 @@ int encontrar()
         //busca();
         break;
     }
+    libera_mem();
+    fecha_arquivo();
 }
 
 int lista()
 {
     cria_abre();
+    aloca(0);
     conta_linhas();
+    aloca(linhas);
     if(linhas > 0)
     {
         int i;
         printf("Lista de clientes: \n");
-        for(i = 0 ; i <linhas; i++)
+        for(i = 0 ; i < linhas; i++)
         {
             printf("%d %s %s %s\n", Ids[i], nomes[i], emails[i], telefones[i]);
         }
@@ -388,22 +397,48 @@ int lista()
     {
         printf("\nNão existe nenhum cliente cadastrado!\n");
     }
+    libera_mem();
     fecha_arquivo();
 }
 
 char busca(char* escolha, int opcao)
 {
-    cria_abre();
+    /*
+        Função entra com um texto (escolha), esse texto pode ser tanto o nome, email como telefone;
+        O que define o que é o nome é a (opcao), 1= nome, 2= email e 3= telefone
+        A função tem que procurar no vetor correspondente por textos iguais e ir adicionando os ids referentes num
+        vetor dinâmico e depois retornar esse vetor para que possa ser utilizado tanto nas funções de alterar 
+        como de excluir clientes.
+    */
 
+    switch (opcao)
+    {
+    case 1:
+        //procura por um nome
+        //return vetor IDS
+        break;
+    case 2:
+        //procura por um email
+        //return vetor IDS
+        break;
+    case 3:
+        //procura por um telefone
+        //return vetor IDS
+        break;
+    }
     printf("\n\n%s\n\n", escolha);
 }
 
 
 int excluir_contato() //esta funcao nao esta funcionando.
 {
+    cria_abre();
+     aloca(0);
+    conta_linhas();
+    aloca(linhas);
     char escolha[50];
     int i;
-    printf("\nDigite o 0- Voltar\n1- nome\n2- email\n3- telefone do usuário para excluir:\n");
+    printf("\nDigite o:\n 0- Voltar\n1- nome\n2- email\n3- telefone do usuário para excluir:\n");
     fflush(stdin);
     scanf("%d", &i);
     switch (i)
@@ -433,6 +468,7 @@ int excluir_contato() //esta funcao nao esta funcionando.
         busca(escolha, i);
         break;
     }
+    libera_mem();
     fecha_arquivo();
 }
 
@@ -547,6 +583,4 @@ void libera_mem()
     free(nomes);
     free(emails);
     free(telefones);
-    printf("x %d\n", sizeof(nomes));
-    printf("x[0] %d\n\n", sizeof(nomes[0]));
 }
