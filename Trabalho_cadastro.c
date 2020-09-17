@@ -20,16 +20,15 @@ void cria_abre();
 int conta_linhas();
 int aloca(int qnt);
 int fecha_arquivo();
-int limpa_nome(int opcao);
+char valida_nome(char* escolha);
+char valida_email(char* escolha);
 int limpa_email(int opcao);
 int excluir_contato();
-
 //int altera();
-//int pesquisa();
-//int exclui();
+int pesquisa();
 
-//int limpa_nome();
-//int verif_email();
+char busca(char* escolha, int opcao);
+
 
 
 int linhas;
@@ -66,20 +65,15 @@ int main()
             encontrar();
             break;
         case 3:
-            //pesquisa();
+            //exclui();
+            excluir_contato();
             break;
         case 4:
-            //exclui();
-            //excluir_contato();
-            break;
-        case 5:
             lista();
             break;
         }
     }
 }
-
-
 
 void cria_abre()
 {
@@ -194,6 +188,10 @@ int adiciona()
     int i = 0;
     int x = 0;
     int index = 0;
+    int aux = 0;
+    char auxNome[50];
+    char auxEmail[50];
+
     printf("-----Adiciona-----\n");
 
     cria_abre();
@@ -217,16 +215,16 @@ int adiciona()
             //printf("----IDS X %d----\n", Ids[x-1]+1);
             printf("Nome:\n");
             fflush(stdin);
-            gets(*nomes);
-            strcpy(nomes[x], *nomes);
-            limpa_nome(x);
+            gets(auxNome);
+            *auxNome = valida_nome(auxNome);
+            strcpy(nomes[x], auxNome);
                         
             printf("E-mail:\n");
             fflush(stdin);
-            gets(*emails);
-            strcpy(emails[x], *emails);
-            limpa_email(x);
-            
+            gets(auxEmail);
+            *auxEmail = valida_email(auxEmail);
+            strcpy(emails[x], auxEmail);
+
             printf("Telefone:\n");
             fflush(stdin);
             gets(*telefones);
@@ -244,27 +242,25 @@ int adiciona()
         {
             index = linhas;
             Ids[index]= index+1;
-           // printf("----IDS Linhas %d -- %d----\n", Ids[index],index);
+            // printf("----IDS Linhas %d -- %d----\n", Ids[index],index);
             // strcpy(nomes[index],"leandro");
             printf("Nome:\n");
             fflush(stdin);
-            gets(*nomes);
-            printf("%s\n", *nomes);
-            strcpy(nomes[index],*nomes);
-            limpa_nome(index);
-                        
+            gets(auxNome);
+            printf("%s\n", auxNome);
+            *auxNome = valida_nome(auxNome);
+            strcpy(nomes[index],auxNome);
+
             printf("E-mail:\n");
             fflush(stdin);
-            gets(*emails);
-            strcpy(emails[index],*emails);
-            limpa_email(index);
-            
+            gets(auxEmail);
+            *auxEmail = valida_email(auxEmail);
+            strcpy(emails[index], auxEmail);
+
             printf("Telefone:\n");
             fflush(stdin);
             gets(*telefones);
             strcpy(telefones[index], *telefones);
-
-                      
 
             fprintf(arquivo,"%d ", Ids[index]);
             //fprintf(arquivo,",");
@@ -279,46 +275,34 @@ int adiciona()
     {       
         Ids[0] = 1;
         printf("Nome:\n");
-            fflush(stdin);
-            gets(*nomes);
-            strcpy(nomes[0],*nomes);
-            limpa_nome(0);
+        fflush(stdin);
+        gets(auxNome);
+        *auxNome = valida_nome(auxNome);
+        strcpy(nomes[0],auxNome);
                         
-            printf("E-mail:\n");
-            fflush(stdin);
-            gets(*emails);
-            strcpy(emails[0],*emails);
-            limpa_email(0);
-            
-            printf("Telefone:\n");
-            fflush(stdin);
-            gets(*telefones);
-            strcpy(telefones[0],*telefones);
+        printf("E-mail:\n");
+        fflush(stdin);
+        gets(auxEmail);
+        *auxEmail = valida_email(auxEmail);
+        strcpy(emails[0], auxEmail);
 
-                      
+        printf("Telefone:\n");
+        fflush(stdin);
+        gets(*telefones);
+        strcpy(telefones[0],*telefones);        
 
-            fprintf(arquivo,"%d ", Ids[0]);
-            //fprintf(arquivo,",");
-            fprintf(arquivo,"%s ", nomes[0]);
-            //fprintf(arquivo,",");
-            fprintf(arquivo,"%s ", emails[0]);
-            //fprintf(arquivo,",");
-            fprintf(arquivo,"%s\n", telefones[0]);
-
-        // fprintf(arquivo,"%d ",Ids[0]);        
-        // strcpy(nomes[0],"leandro");
-        // limpa_nome(0);
-        
-        // fprintf(arquivo,"%s ",nomes[0]);
-        // strcpy(emails[0],"xxxxxxx@xxxx.com");
-        // limpa_email(0);
-        // fprintf(arquivo,"%s ",emails[0]);
-        // strcpy(telefones[0], "01010101");
-        // fprintf(arquivo,"%s\n",telefones[0]);
+        fprintf(arquivo,"%d ", Ids[0]);
+        //fprintf(arquivo,",");
+        fprintf(arquivo,"%s ", nomes[0]);
+        //fprintf(arquivo,",");
+        fprintf(arquivo,"%s ", emails[0]);
+        //fprintf(arquivo,",");
+        fprintf(arquivo,"%s\n", telefones[0]);
     }
     fecha_arquivo();
     printf("Contato adicionado com sucesso.\n");
 }
+
 
 int fecha_arquivo()
 {
@@ -331,9 +315,8 @@ int menu ()
     printf("\n                    Agenda\n");
     printf(" 1 - Adicionar contato\n");
     printf(" 2 - Alterar contato\n");
-    printf(" 3 - Pesquisar contato\n");
-    printf(" 4 - Excluir contato\n");
-    printf(" 5 - Exibir lista de contatos\n");
+    printf(" 3 - Excluir contato\n");
+    printf(" 4 - Exibir lista de contatos\n");
     printf(" 0 - Sair\n");
     printf("\nInsira o número da função desejada:\n");
     scanf("%d", &escolha);
@@ -398,83 +381,122 @@ int lista()
     {
         printf("\nNão existe nenhum cliente cadastrado!\n");
     }
-
     fecha_arquivo();
 }
 
-int limpa_nome(int opcao)
+char busca(char* escolha, int opcao)
+{
+    cria_abre();
+
+    printf("\n\n%s\n\n", escolha);
+}
+
+
+int excluir_contato() //esta funcao nao esta funcionando.
+{
+    char escolha[50];
+    int i;
+    printf("\nDigite o 0- Voltar\n1- nome\n2- email\n3- telefone do usuário para excluir:\n");
+    fflush(stdin);
+    scanf("%d", &i);
+    switch (i)
+    {
+    case 0:
+        return 0;
+        break;
+    case 1:
+        fflush(stdin);
+        gets(escolha);
+        *escolha = valida_nome(escolha); 
+        printf("escolha: %s\n",escolha);   
+        break;
+    case 2:
+        fflush(stdin);
+        gets(escolha);
+        *escolha = valida_email(escolha);
+        printf("escolha: %s\n",escolha);
+        break;
+    case 3:
+
+        break;
+    }
+    fecha_arquivo();
+}
+
+char valida_nome(char* escolha)
 {
     int i;
     int valida = 0; 
-   for (i= 0; i < 50; i++)
+    for (i= 0; i < 50; i++)
     {
-        if(nomes[opcao][i] == 0)
+        if(escolha[i] == 0)
         {
             printf("\n%d\n",i);
             break;
         }
-        if(((nomes[opcao][i] < 96) || (nomes[opcao][i] > 123))&&(nomes[opcao][i] != 32))   
+        if(((escolha[i] < 96) || (escolha[i] > 123)) && (escolha[i] != 32))   
         {
-            printf("\ninvalido %d\n", nomes[opcao][i]);
+            printf("\ninvalido %d\n", escolha[i]);
             valida = 1;
-        }
-        
+        }    
     }
 
     if(valida != 1)
     {
         for(i = 0; i < 50; i++)
         {
-            if(nomes[opcao][i] > 96 && nomes[opcao][i] < 123)   
+            if(escolha[i] > 96 && escolha[i] < 123)   
             {
-                nomes[opcao][i] = nomes[opcao][i] - 32;
+                escolha[i] = escolha[i] - 32;
             }   
-            else if(nomes[opcao][i] == 32)
+            else if(escolha[i] == 32)
             {
-                nomes[opcao][i] = nomes[opcao][i];
+                escolha[i] = escolha[i];
             }
-            if(nomes[opcao][i] == 0)
+            if(escolha[i] == 0)
             {
                 break;
             }
         }
-        
+        printf("%s\n\n", escolha);
+        return *escolha;   
     }
     else
     {
         printf("Nome com caractere invalido, por favor insira novamente:\n");
         fflush(stdin);
-        gets(*nomes);
-        strcpy(nomes[opcao],*nomes);
-        limpa_nome(opcao);
+        gets(escolha);
+        valida_nome(escolha);
     }
 }
 
-int limpa_email(int opcao)
+char valida_email(char* escolha)
 {
     int i;
+    int pos;
     int validador1 = 0;
     int validador2 = 0;
 
     for(i = 0; i < 50; i++)
     {
-        if(emails[opcao][i] == 64)   
+        if(escolha[i] == 64)   
         {
             validador1 = 1;
+            pos = i;
             break;
         }
     }
     
-    for(i = 0; i < 50; i++)
+    for(i = pos; i < 50; i++)
     {
-        if(emails[opcao][i] == 46)   
+        if(escolha[i] == 46)   
         {
 
-            if(emails[opcao][i+1] == 99)
+            if(escolha[i+1] == 99)
             {
-                if(emails[opcao][i+2] == 111)
+                if(escolha[i+2] == 111)
                 {
-                    if(emails[opcao][i+3] == 109)
+                    if(escolha[i+3] == 109)
                     {
                         validador2 = 1;
                         break;
@@ -486,47 +508,17 @@ int limpa_email(int opcao)
             break;
         }
     }
-
-        
+    
     if ((validador1 != 1) || (validador2 != 1))
     {
-        printf("Validador 1 = %d, validador 2 = %d\n", validador1,validador2);
         printf("\nE-mail inválido. O e-mail deve ser digitado no formato exemplo@exemplo.com\n\n");
         printf("Insira um e-mail no formato exemplo@exemplo.com:\n");
         fflush(stdin);
-        gets(*emails);
-        strcpy(emails[opcao],*emails);
-        limpa_email(opcao);
+        gets(escolha);
+        valida_email(escolha);
+    }
+    else
+    {
+        return *escolha;
     }
 }
-
-/*
-int excluir_contato() //esta funcao nao esta funcionando.
-{
-    int opcao;
-
-    lista();
-    printf("\nDigite o ID do usuário para excluir.\n");
-    
-    fflush(stdin);
-    scanf("%d", &opcao);
-    opcao -= 1;
-    
-    cria_abre();
-    conta_linhas();
-    aloca(linhas);
-    
-    nomes[opcao] = "";
-    emails[opcao] = "";
-    telefones[opcao] = "";
-    //Ids[opcao] = 0;
-    
-
-    fecha_arquivo();
-    conta_linhas();
-
-    printf("Contato excluido com sucesso.\n");
-    sleep(2);
-    menu();
-}
-*/
