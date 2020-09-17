@@ -9,23 +9,27 @@
 3- Nome em caixa alta
 
 */
+int menu();
 
 int adiciona();
-int acessa();
-int ordena();
-int escreve();
+//int encontrar();
+int excluir_contato();
 int lista();
-int menu();
+
 void cria_abre();
 int conta_linhas();
 int aloca(int qnt);
+int ordena();
+
 int fecha_arquivo();
+
 char valida_nome(char* escolha);
 char valida_email(char* escolha);
 int limpa_email(int opcao);
-int excluir_contato();
+
+void libera_mem();
+
 //int altera();
-int pesquisa();
 
 char busca(char* escolha, int opcao);
 
@@ -72,6 +76,7 @@ int main()
             lista();
             break;
         }
+        libera_mem();
     }
 }
 
@@ -341,23 +346,25 @@ int encontrar()
     printf("4 - Telefone\n");
     printf("0 - Voltar\n");
     scanf("%d", &escolha);
-
     switch (escolha)
     {
     case 0:
       return 0;
     case 1:
         
+        //busca();
         break;
     case 2:
-      //  altera();
         
+        //busca();
         break;
     case 3:
-      //  pesquisa();
+
+        //busca();
         break;
     case 4:
-      //exclui();
+
+        //busca();
         break;
     }
 }
@@ -408,16 +415,22 @@ int excluir_contato() //esta funcao nao esta funcionando.
         fflush(stdin);
         gets(escolha);
         *escolha = valida_nome(escolha); 
-        printf("escolha: %s\n",escolha);   
+        printf("escolha: %s\n", escolha);
+        busca(escolha, i);   
         break;
+
     case 2:
         fflush(stdin);
         gets(escolha);
         *escolha = valida_email(escolha);
-        printf("escolha: %s\n",escolha);
+        printf("escolha: %s\n", escolha);
+        busca(escolha, i);
         break;
-    case 3:
 
+    case 3:
+        fflush(stdin);
+        gets(escolha);
+        busca(escolha, i);
         break;
     }
     fecha_arquivo();
@@ -440,7 +453,6 @@ char valida_nome(char* escolha)
             valida = 1;
         }    
     }
-
     if(valida != 1)
     {
         for(i = 0; i < 50; i++)
@@ -485,8 +497,7 @@ char valida_email(char* escolha)
             pos = i;
             break;
         }
-    }
-    
+    } 
     for(i = pos; i < 50; i++)
     {
         if(escolha[i] == 46)   
@@ -508,7 +519,6 @@ char valida_email(char* escolha)
             break;
         }
     }
-    
     if ((validador1 != 1) || (validador2 != 1))
     {
         printf("\nE-mail inválido. O e-mail deve ser digitado no formato exemplo@exemplo.com\n\n");
@@ -521,4 +531,22 @@ char valida_email(char* escolha)
     {
         return *escolha;
     }
+}
+
+void libera_mem()
+{
+    int i;
+    free(Ids);
+    
+    for(i = 0; i < linhas; i++)
+    {
+        free(nomes[i]);
+        free(emails[i]);
+        free(telefones[i]);
+    }
+    free(nomes);
+    free(emails);
+    free(telefones);
+    printf("x %d\n", sizeof(nomes));
+    printf("x[0] %d\n\n", sizeof(nomes[0]));
 }
