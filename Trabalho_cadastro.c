@@ -31,13 +31,13 @@ void libera_mem();
 
 //int altera();
 
-char busca(char* escolha, int opcao);
-
+int *busca(char* escolha, int opcao, int* tamanho);
 
 
 int linhas;
 
 FILE *arquivo;
+FILE *arquivo_aux;
 int *Ids;
 char **nomes;
 char **emails;
@@ -50,7 +50,7 @@ int main()
     aloca(0);
     conta_linhas();
     aloca(linhas);
-    fecha_arquivo();
+    fecha_arquivo(arquivo);
 
     while(opcao != 0)
     {
@@ -81,7 +81,6 @@ int main()
 
 void cria_abre()
 {
-    int i = 0;
     arquivo = fopen("Dados.txt", "a+");
     if (arquivo == NULL)
     {
@@ -199,7 +198,9 @@ int adiciona()
     printf("-----Adiciona-----\n");
 
     cria_abre();
+    aloca(0);
     conta_linhas();
+    aloca(linhas);
     if(linhas > 0)
     {   
         aloca(linhas + 1);
@@ -312,6 +313,7 @@ int adiciona()
 int fecha_arquivo()
 {
     fclose(arquivo);
+    fclose(arquivo_aux);
 }
 
 int menu ()
@@ -401,7 +403,7 @@ int lista()
     fecha_arquivo();
 }
 
-char busca(char* escolha, int opcao)
+int *busca(char* escolha, int opcao, int* tamanho)
 {
     /*
         Função entra com um texto (escolha), esse texto pode ser tanto o nome, email como telefone;
@@ -410,34 +412,118 @@ char busca(char* escolha, int opcao)
         vetor dinâmico e depois retornar esse vetor para que possa ser utilizado tanto nas funções de alterar 
         como de excluir clientes.
     */
+    int *vet_Ids;
+
+    int i;
+    int j = 0;
 
     switch (opcao)
     {
     case 1:
         //procura por um nome
         //return vetor IDS
+        for(i = 0; i < linhas; i++)
+        {
+            if(strcmp(escolha , nomes[i]) == 0)
+            {    
+                j++;
+            }
+        }
+
+        if(j > 0)
+        {
+            vet_Ids =(int*) malloc(j);
+            j = 0;
+            for(i = 0; i < linhas; i++)
+            {
+                if(strcmp(escolha , nomes[i]) == 0)
+                {    
+                    vet_Ids[j] = Ids[i];
+                    j++;
+                }
+            }
+        }
         break;
     case 2:
         //procura por um email
         //return vetor IDS
+for(i = 0; i < linhas; i++)
+        {
+            if(strcmp(escolha , emails[i]) == 0)
+            {    
+                j++;
+            }
+        }
+
+        if(j > 0)
+        {
+            vet_Ids = (int*) malloc(j);
+            j = 0;
+            for(i = 0; i < linhas; i++)
+            {
+                if(strcmp(escolha , emails[i]) == 0)
+                {    
+                    vet_Ids[j] = Ids[i];
+                    j++;
+                }
+            }
+        }
         break;
     case 3:
         //procura por um telefone
         //return vetor IDS
+        for(i = 0; i < linhas; i++)
+        {
+            if(strcmp(escolha , telefones[i]) == 0)
+            {    
+                j++;
+            }
+        }
+
+        if(j > 0)
+        {
+            vet_Ids = malloc(j);
+            j = 0;
+            for(i = 0; i < linhas; i++)
+            {
+                if(strcmp(escolha , telefones[i]) == 0)
+                {    
+                    vet_Ids[j] = Ids[i];
+                    j++;
+                }
+            }
+        }
         break;
     }
-    printf("\n\n%s\n\n", escolha);
+    
+    *tamanho = j;
+
+    if (j > 0)
+    {
+        for(i=0;i<j;i++)
+        {
+            printf("id %d\n", vet_Ids[i]);
+        }
+        return vet_Ids;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 
 int excluir_contato() //esta funcao nao esta funcionando.
 {
     cria_abre();
-     aloca(0);
+    aloca(0);
     conta_linhas();
     aloca(linhas);
-    char escolha[50];
-    int i;
+    int *resultado;
+    char escolha[50], c;
+    int i, tamanho, j;
+    tamanho = 0;
+
     printf("\nDigite o:\n 0- Voltar\n1- nome\n2- email\n3- telefone do usuário para excluir:\n");
     fflush(stdin);
     scanf("%d", &i);
@@ -451,7 +537,7 @@ int excluir_contato() //esta funcao nao esta funcionando.
         gets(escolha);
         *escolha = valida_nome(escolha); 
         printf("escolha: %s\n", escolha);
-        busca(escolha, i);   
+        resultado = busca(escolha, i, &tamanho);   
         break;
 
     case 2:
@@ -459,15 +545,102 @@ int excluir_contato() //esta funcao nao esta funcionando.
         gets(escolha);
         *escolha = valida_email(escolha);
         printf("escolha: %s\n", escolha);
-        busca(escolha, i);
+        resultado = busca(escolha, i, &tamanho);
         break;
 
     case 3:
         fflush(stdin);
         gets(escolha);
-        busca(escolha, i);
+        resultado = busca(escolha, i, &tamanho);
         break;
     }
+    fecha_arquivo();
+    if (tamanho == 0)
+    {
+        //pergunta novamente
+    }
+    else if(tamanho > 1)
+    {
+        printf("Foi encontrado mais de um cliente com a mesma informacao.\n Insira o ID do cliente que deseja excluir?\n");
+        for(i = 0; i < tamanho; i ++)
+        {
+            printf(" %d - %s - %s - %s\n", Ids[resultado[i]-1], nomes[resultado[i]-1], emails[resultado[i]-1], telefones[resultado[i]-1]);
+        }
+        fflush(stdin);
+        scanf("%d",&escolha);
+        for(i = 0; i < tamanho; i ++)
+        {
+            if(*escolha == Ids[resultado[i]-1])
+            {
+                j = 1;
+            }
+        }
+        while(j != 1)
+        {
+            printf("Valor invalido, insira novamente:\n");
+            fflush(stdin);
+            scanf("%d",&escolha);
+            for(i = 0; i < tamanho; i ++)
+            {
+                if(*escolha == Ids[resultado[i]-1])
+                {
+                    j = 1;
+                }
+            }
+        }
+
+        for(i = 0; i < linhas; i++)
+        {
+            if(Ids[i] == *escolha)
+            {
+                arquivo_aux = fopen("Arq_auxiliar.txt", "w+");
+                if (arquivo_aux == NULL)
+                {
+                    printf("\n\nerro na criacao\n");
+                }
+                else
+                {
+                    for(i = 0; i < linhas; i++)
+                    {
+                        if(Ids[i] != *escolha)
+                        {
+                            fprintf(arquivo,"%d ", Ids[i]);
+                        
+                            fprintf(arquivo,"%s ", nomes[i]);
+                            
+                            fprintf(arquivo,"%s ", emails[i]);
+                        
+                            fprintf(arquivo,"%s\n", telefones[i]);
+                        }
+                    }
+                    fecha_arquivo();
+                    arquivo_aux = fopen("Arq_auxiliar.txt", "r");
+                    if (arquivo_aux == NULL)
+                    {
+                        printf("\n\nerro na criacao\n");
+                    }
+                    arquivo = fopen("Dados.txt", "w+");
+                    if (arquivo == NULL)
+                    {
+                        printf("\n\nerro na criacao\n");
+                    }
+                        
+                        c = fgetc(arquivo_aux); 
+                        while (c != EOF) 
+                        { 
+                            fputc(c, arquivo); 
+                            c = fgetc(arquivo_aux); 
+                        }    
+                    printf("cliente excluido\n");
+                }
+            }
+        }
+    }
+    else
+    {
+        /* exclui o unico q apareceu */
+    }
+    
     libera_mem();
     fecha_arquivo();
 }
