@@ -589,28 +589,24 @@ int excluir_contato() //esta funcao nao esta funcionando.
             }
         }
 
-        for(i = 0; i < linhas; i++)
-        {
-            if(Ids[i] == *escolha)
+            arquivo_aux = fopen("Arq_auxiliar.txt", "w+");
+            if (arquivo_aux == NULL)
             {
-                arquivo_aux = fopen("Arq_auxiliar.txt", "w+");
-                if (arquivo_aux == NULL)
-                {
-                    printf("\n\nerro na criacao\n");
-                }
-                else
-                {
-                    for(i = 0; i < linhas; i++)
-                    {
-                        if(Ids[i] != *escolha)
-                        {
-                            fprintf(arquivo,"%d ", Ids[i]);
+                printf("\n\nerro na criacao\n");
+            }
+            else
+            {
+                for(i = 0; i < linhas; i++)
+                {                        
+                    if(Ids[i] != *escolha)
+                       {
+                            fprintf(arquivo_aux,"%d ", Ids[i]);
                         
-                            fprintf(arquivo,"%s ", nomes[i]);
+                            fprintf(arquivo_aux,"%s ", nomes[i]);
                             
-                            fprintf(arquivo,"%s ", emails[i]);
+                            fprintf(arquivo_aux,"%s ", emails[i]);
                         
-                            fprintf(arquivo,"%s\n", telefones[i]);
+                            fprintf(arquivo_aux,"%s\n", telefones[i]);
                         }
                     }
                     fecha_arquivo();
@@ -624,7 +620,8 @@ int excluir_contato() //esta funcao nao esta funcionando.
                     {
                         printf("\n\nerro na criacao\n");
                     }
-                        
+                    else
+                    {
                         c = fgetc(arquivo_aux); 
                         while (c != EOF) 
                         { 
@@ -632,15 +629,9 @@ int excluir_contato() //esta funcao nao esta funcionando.
                             c = fgetc(arquivo_aux); 
                         }    
                     printf("cliente excluido\n");
+                    }
                 }
             }
-        }
-    }
-    else
-    {
-        /* exclui o unico q apareceu */
-    }
-    
     libera_mem();
     fecha_arquivo();
 }
