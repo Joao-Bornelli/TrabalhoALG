@@ -1,3 +1,11 @@
+/*
+    EQUIPE: JOÃO LUÍS CORRÊA BORNELLI
+            RAFAELA FERNANDA DA SILVA FERREIRA
+            FRANTOR CESAR FAGUNDES DE OLIVEIRA JUNIOR
+            LEANDRO FELIPE MOREIRA
+*/
+
+
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
@@ -31,7 +39,7 @@ char **nomes;
 char **emails;
 char **telefones;
 
-
+//MAIN
 int main()
 {
     int opcao = 1;
@@ -66,7 +74,7 @@ int main()
     }
 }
 
-
+//Cria o arquivo caso não exista ou abre
 void cria_abre()
 {
     arquivo = fopen("Dados.txt", "a+");
@@ -76,7 +84,7 @@ void cria_abre()
     }
 }
 
-
+//Conta a quantidade de linhas dentro do arquivo
 int conta_linhas()
 {   
     int caractere = 0;
@@ -91,7 +99,7 @@ int conta_linhas()
 }
 
 
-//Copia os clientes para um array dinamicamente
+//Copia os contatos para um array dinamicamente
 int aloca(int qnt)
 {
     int i = 0;
@@ -136,7 +144,7 @@ int aloca(int qnt)
 }
 
 
-//Ordena os clientes pelo ID de forma crescente
+//Ordena os contatos pelo ID de forma crescente
 int ordena()
 {
     int i, j, auxIds;
@@ -171,7 +179,7 @@ int ordena()
 }
 
 
-//Função para adicionar um novo cliente
+//Função para adicionar um novo contato
 int adiciona()
 {   
     int i = 0;
@@ -204,18 +212,21 @@ int adiciona()
         {
             Ids[x] = Ids[x-1] + 1;
             printf("Nome:\n");
+            __fpurge(stdin);
             fflush(stdin);
             gets(auxNome);
             *auxNome = valida_nome(auxNome);
             strcpy(nomes[x], auxNome);
                         
             printf("E-mail:\n");
+            __fpurge(stdin);
             fflush(stdin);
             gets(auxEmail);
             *auxEmail = valida_email(auxEmail);
             strcpy(emails[x], auxEmail);
 
             printf("Telefone:\n");
+            __fpurge(stdin);
             fflush(stdin);
             gets(*telefones);
             strcpy(telefones[x], *telefones);
@@ -230,6 +241,7 @@ int adiciona()
             index = linhas;
             Ids[index]= index+1;
             printf("Nome:\n");
+            __fpurge(stdin);
             fflush(stdin);
             gets(auxNome);
             printf("%s\n", auxNome);
@@ -237,12 +249,14 @@ int adiciona()
             strcpy(nomes[index],auxNome);
 
             printf("E-mail:\n");
+            __fpurge(stdin);
             fflush(stdin);
             gets(auxEmail);
             *auxEmail = valida_email(auxEmail);
             strcpy(emails[index], auxEmail);
 
             printf("Telefone:\n");
+            __fpurge(stdin);
             fflush(stdin);
             gets(*telefones);
             strcpy(telefones[index], *telefones);
@@ -257,18 +271,21 @@ int adiciona()
     {       
         Ids[0] = 1;
         printf("Nome:\n");
+        __fpurge(stdin);
         fflush(stdin);
         gets(auxNome);
         *auxNome = valida_nome(auxNome);
         strcpy(nomes[0],auxNome);
                         
         printf("E-mail:\n");
+        __fpurge(stdin);
         fflush(stdin);
         gets(auxEmail);
         *auxEmail = valida_email(auxEmail);
         strcpy(emails[0], auxEmail);
 
         printf("Telefone:\n");
+        __fpurge(stdin);
         fflush(stdin);
         gets(*telefones);
         strcpy(telefones[0],*telefones);        
@@ -283,7 +300,7 @@ int adiciona()
     printf("Contato adicionado com sucesso.\n");
 }
 
-
+//Função para fechar o arquivo
 int fecha_arquivo()
 {
     fflush(stdin);
@@ -291,7 +308,7 @@ int fecha_arquivo()
     fclose(arquivo_aux);
 }
 
-
+//Menu principal
 int menu ()
 {
     int escolha;
@@ -302,10 +319,13 @@ int menu ()
     printf(" 4 - Exibir lista de contatos\n");
     printf(" 0 - Sair\n");
     printf("\nInsira o número da função desejada:\n");
+    __fpurge(stdin);
+    fflush(stdin);
     scanf("%d", &escolha);
 
     while(escolha < 0 || escolha > 5){
         printf("Número inválido, insira uma opção válida ou 0 para encerrar o programa.\n");
+        __fpurge(stdin);
         fflush(stdin);
         scanf("%d", &escolha); 
     }
@@ -313,7 +333,7 @@ int menu ()
 }
 
 
-//Função para alterar alguma informação de um cliente
+//Função para alterar alguma informação de um contato
 int alterar()
 {
     cria_abre();
@@ -325,7 +345,8 @@ int alterar()
     int i, tamanho, j, info;
     tamanho = 0;
 
-    printf("\nQual cliente que deseja alterar?\nDigite:\n0- Voltar\n1- pesquisar por nome\n2- pesquisar por email\n3- pesquisar por telefone\n");
+    printf("\nQual contato que deseja alterar?\nDigite:\n0- Voltar\n1- pesquisar por nome\n2- pesquisar por email\n3- pesquisar por telefone\n");
+    __fpurge(stdin);
     fflush(stdin);
     scanf("%d", &i);
     switch (i)
@@ -335,6 +356,7 @@ int alterar()
         break;
     case 1:
         printf("Insira o nome:\n");
+        __fpurge(stdin);
         fflush(stdin);
         gets(escolha);
         *escolha = valida_nome(escolha); 
@@ -344,6 +366,7 @@ int alterar()
 
     case 2:
         printf("Insira o email:\n");
+        __fpurge(stdin);
         fflush(stdin);
         gets(escolha);
         *escolha = valida_email(escolha);
@@ -353,6 +376,7 @@ int alterar()
 
     case 3:
         printf("Insira o telefone:\n");
+        __fpurge(stdin);
         fflush(stdin);
         gets(escolha);
         resultado = busca(escolha, i, &tamanho);
@@ -366,7 +390,7 @@ int alterar()
         {
             if(Ids[i] == *escolha)
             {
-                printf("Cliente que sera alterado: %d %s %s %s\n", Ids[i], nomes[i], emails[i], telefones[i]);
+                printf("contato que sera alterado: %d %s %s %s\n", Ids[i], nomes[i], emails[i], telefones[i]);
                 j = i;
                 break;
             } 
@@ -378,6 +402,7 @@ int alterar()
         while ((info < 0)||(info > 3))
         {
             printf("Opcao invalida, insira novamente\n");
+            __fpurge(stdin);
             fflush(stdin);
             scanf("%d",&info);
         }
@@ -387,6 +412,7 @@ int alterar()
             break;
         case 1:
             printf("Insira o novo nome:\n");
+            __fpurge(stdin);
             fflush(stdin);
             gets(nova_info);
             valida_nome(nova_info);
@@ -394,6 +420,7 @@ int alterar()
             break;
         case 2:
             printf("Insira o novo email:\n");
+            __fpurge(stdin);
             fflush(stdin);
             gets(nova_info);
             valida_email(nova_info);
@@ -401,6 +428,7 @@ int alterar()
             break;
         case 3:
             printf("Insira o novo telefone:\n");
+            __fpurge(stdin);
             fflush(stdin);
             gets(nova_info);
             strcpy(telefones[j], nova_info);
@@ -424,17 +452,18 @@ int alterar()
                 fprintf(arquivo,"%s\n", telefones[i]);
             }
             fecha_arquivo();
-            printf("cliente alterado\n");                
+            printf("contato alterado\n");                
         }
     }
     else if(tamanho > 1)
     {   
-        printf("Foi encontrado mais de um cliente com a mesma informacao.\n");
+        printf("Foi encontrado mais de um contato com a mesma informacao.\n");
         for(i = 0; i < tamanho; i ++)
         {
             printf(" ID:%d - %s - %s - %s\n", Ids[resultado[i]-1], nomes[resultado[i]-1], emails[resultado[i]-1], telefones[resultado[i]-1]);
         }
-        printf("Insira o ID do cliente que deseja excluir?\n");
+        printf("Insira o ID do contato que deseja excluir?\n");
+        __fpurge(stdin);
         fflush(stdin);
         scanf("%d",&escolha);
         
@@ -448,6 +477,7 @@ int alterar()
         while(j != 1)
         {
             printf("Valor invalido, insira novamente:\n");
+            __fpurge(stdin);
             fflush(stdin);
             scanf("%d",&escolha);
             for(i = 0; i < tamanho; i ++)
@@ -462,13 +492,14 @@ int alterar()
         {
             if(Ids[i] == *escolha)
             {
-                printf("Cliente que sera alterado: %d %s %s %s\n", Ids[i], nomes[i], emails[i], telefones[i]);
+                printf("contato que sera alterado: %d %s %s %s\n", Ids[i], nomes[i], emails[i], telefones[i]);
                 j = i;
                 break;
             } 
         }
         printf("Qual informcao voce deseja alterar?\n");
         printf("0- Voltar\n1- Nome\n2- Email\n3- Telefone\n");
+        __fpurge(stdin);
         fflush(stdin);
         scanf("%d",&info);
         switch (info)
@@ -478,6 +509,7 @@ int alterar()
             break;
         case 1:
             printf("Insira o novo nome:\n");
+            __fpurge(stdin);
             fflush(stdin);
             gets(nova_info);
             valida_nome(nova_info);
@@ -485,6 +517,7 @@ int alterar()
             break;
         case 2:
             printf("Insira o novo email:\n");
+            __fpurge(stdin);
             fflush(stdin);
             gets(nova_info);
             valida_email(nova_info);
@@ -492,6 +525,7 @@ int alterar()
             break;
         case 3:
             printf("Insira o novo telefone:\n");
+            __fpurge(stdin);
             fflush(stdin);
             gets(nova_info);
             strcpy(telefones[j], nova_info);
@@ -517,14 +551,14 @@ int alterar()
             }
         }
         fecha_arquivo();   
-        printf("cliente alterado\n");              
+        printf("contato alterado\n");              
     }   
     libera_mem();
     fecha_arquivo();
 }
 
 
-//Função para printar todos os clientes cadastrados
+//Função para printar todos os contatos cadastrados
 int lista()
 {
     cria_abre();
@@ -534,7 +568,7 @@ int lista()
     if(linhas > 0)
     {
         int i;
-        printf("Lista de clientes: \n");
+        printf("Lista de contatos: \n");
         for(i = 0 ; i < linhas; i++)
         {
             printf("%d %s %s %s\n", Ids[i], nomes[i], emails[i], telefones[i]);
@@ -544,14 +578,14 @@ int lista()
     }
     else
     {
-        printf("\nNão existe nenhum cliente cadastrado!\n");
+        printf("\nNão existe nenhum contato cadastrado!\n");
     }
     libera_mem();
     fecha_arquivo();
 }
 
 
-//Função para buscar um cliente no array
+//Função para buscar um contato no array
 int *busca(char* escolha, int opcao, int* tamanho)
 {
     int *vet_Ids;
@@ -643,7 +677,7 @@ int *busca(char* escolha, int opcao, int* tamanho)
 }
 
 
-//Função para excluir um cliente
+//Função para excluir um contato
 int excluir_contato()
 {
     cria_abre();
@@ -656,6 +690,7 @@ int excluir_contato()
     tamanho = 0;
 
     printf("\nDigite:\n0- Voltar\n1- excluir por nome\n2- excluir por email\n3- excluir por telefone\n");
+    __fpurge(stdin);
     fflush(stdin);
     scanf("%d", &i);
     switch (i)
@@ -665,6 +700,7 @@ int excluir_contato()
         break;
     case 1:
         printf("Insira o nome:\n");
+        __fpurge(stdin);
         fflush(stdin);
         gets(escolha);
         *escolha = valida_nome(escolha); 
@@ -673,6 +709,7 @@ int excluir_contato()
         break;
     case 2:
         printf("Insira o email:\n");
+        __fpurge(stdin);
         fflush(stdin);
         gets(escolha);
         *escolha = valida_email(escolha);
@@ -681,6 +718,7 @@ int excluir_contato()
         break;
     case 3:
         printf("Insira o telefone:\n");
+        __fpurge(stdin);
         fflush(stdin);
         gets(escolha);
         resultado = busca(escolha, i, &tamanho);
@@ -736,17 +774,18 @@ int excluir_contato()
                 fputc(c, arquivo); 
                 c = fgetc(arquivo_aux); 
             }    
-            printf("cliente excluido\n");
+            printf("contato excluido\n");
             }                
         }
     }
     else if(tamanho > 1)
     {
-        printf("Foi encontrado mais de um cliente com a mesma informacao.\n Insira o ID do cliente que deseja excluir?\n");
+        printf("Foi encontrado mais de um contato com a mesma informacao.\n Insira o ID do contato que deseja excluir?\n");
         for(i = 0; i < tamanho; i ++)
         {
             printf(" %d - %s - %s - %s\n", Ids[resultado[i]-1], nomes[resultado[i]-1], emails[resultado[i]-1], telefones[resultado[i]-1]);
         }
+        __fpurge(stdin);
         fflush(stdin);
         scanf("%d",&escolha);
 
@@ -760,6 +799,7 @@ int excluir_contato()
         while(j != 1)
         {
             printf("Valor invalido, insira novamente:\n");
+            __fpurge(stdin);
             fflush(stdin);
             scanf("%d",&escolha);
             for(i = 0; i < tamanho; i ++)
@@ -806,7 +846,7 @@ int excluir_contato()
                     fputc(c, arquivo); 
                     c = fgetc(arquivo_aux); 
                 }    
-                printf("cliente excluido\n");
+                printf("contato excluido\n");
             }
         }
     }
@@ -856,6 +896,7 @@ char valida_nome(char* escolha)
     else
     {
         printf("Nome com caractere invalido, por favor insira novamente:\n");
+        __fpurge(stdin);
         fflush(stdin);
         gets(escolha);
         valida_nome(escolha);
@@ -904,6 +945,7 @@ char valida_email(char* escolha)
     {
         printf("\nE-mail inválido. O e-mail deve ser digitado no formato exemplo@exemplo.com\n\n");
         printf("Insira um e-mail no formato exemplo@exemplo.com:\n");
+        __fpurge(stdin);
         fflush(stdin);
         gets(escolha);
         valida_email(escolha);
