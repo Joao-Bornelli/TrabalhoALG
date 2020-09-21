@@ -12,8 +12,9 @@
 int menu();
 
 int adiciona();
-//int encontrar();
+int alterar();
 int excluir_contato();
+
 int lista();
 
 void cria_abre();
@@ -29,7 +30,7 @@ int limpa_email(int opcao);
 
 void libera_mem();
 
-//int altera();
+
 
 int *busca(char* escolha, int opcao, int* tamanho);
 
@@ -66,7 +67,7 @@ int main()
             break;
         case 2:
             //altera();
-            encontrar();
+            alterar();
             break;
         case 3:
             //exclui();
@@ -210,7 +211,7 @@ int adiciona()
             if(Ids[i] > (Ids[i-1]+1))
             {
                 //printf("----IDS I %d----\n", Ids[i]);
-                x = i;
+                x = 5;
                 break;
             }
         }
@@ -312,6 +313,7 @@ int adiciona()
 
 int fecha_arquivo()
 {
+    fflush(stdin);
     fclose(arquivo);
     fclose(arquivo_aux);
 }
@@ -338,42 +340,218 @@ int menu ()
 
 
 
-int encontrar()
+int alterar()
 {
     cria_abre();
     aloca(0);
     conta_linhas();
     aloca(linhas);
+    int *resultado;
+    char escolha[50],nova_info[50], c;
+    int i, tamanho, j, info;
+    tamanho = 0;
 
-    int escolha;
-    printf("Digite o tipo de informação a ser buscada:\n");
-    printf("1 - Id\n");
-    printf("2 - Nome\n");
-    printf("3 - Email\n");
-    printf("4 - Telefone\n");
-    printf("0 - Voltar\n");
-    scanf("%d", &escolha);
-    switch (escolha)
+    printf("\nQual cliente que deseja alterar?\nDigite:\n0- Voltar\n1- pesquisar por nome\n2- pesquisar por email\n3- pesquisar por telefone\n");
+    fflush(stdin);
+    scanf("%d", &i);
+    switch (i)
     {
     case 0:
-      return 0;
+        return 0;
+        break;
     case 1:
-        
-        //busca();
+        printf("Insira o nome:\n");
+        fflush(stdin);
+        gets(escolha);
+        *escolha = valida_nome(escolha); 
+        printf("escolha: %s\n", escolha);
+        resultado = busca(escolha, i, &tamanho);   
         break;
+
     case 2:
-        
-        //busca();
+        printf("Insira o email:\n");
+        fflush(stdin);
+        gets(escolha);
+        *escolha = valida_email(escolha);
+        printf("escolha: %s\n", escolha);
+        resultado = busca(escolha, i, &tamanho);
         break;
+
     case 3:
-
-        //busca();
-        break;
-    case 4:
-
-        //busca();
+        printf("Insira o telefone:\n");
+        fflush(stdin);
+        gets(escolha);
+        resultado = busca(escolha, i, &tamanho);
         break;
     }
+    fecha_arquivo();
+
+    
+    if (tamanho == 1)
+    {
+        *escolha = resultado[0];
+        for(i = 0; i < linhas; i++)
+        {
+            if(Ids[i] == *escolha)
+            {
+                printf("Cliente que sera alterado: %d %s %s %s\n", Ids[i], nomes[i], emails[i], telefones[i]);
+                j = i;
+                break;
+            } 
+        }
+        printf("Qual informcao voce deseja alterar?\n");
+        printf("0- Voltar\n1- Nome\n2- Email\n3- Telefone\n");
+        fflush(stdin);
+        scanf("%d",&info);
+        while ((info < 0)||(info > 3))
+        {
+            printf("Opcao invalida, insira novamente\n");
+            fflush(stdin);
+            scanf("%d",&info);
+        }
+
+        switch (info)
+        {
+        case 0:
+
+            break;
+        case 1:
+            printf("Insira o novo nome:\n");
+            fflush(stdin);
+            gets(nova_info);
+            valida_nome(nova_info);
+            strcpy(nomes[j], nova_info);
+            break;
+        case 2:
+            printf("Insira o novo email:\n");
+            fflush(stdin);
+            gets(nova_info);
+            valida_email(nova_info);
+            strcpy(emails[j], nova_info);
+            break;
+        case 3:
+            printf("Insira o novo telefone:\n");
+            fflush(stdin);
+            gets(nova_info);
+            strcpy(telefones[j], nova_info);
+            break;
+        }
+        arquivo = fopen("Dados.txt", "w+");
+        if (arquivo == NULL)
+        {
+            printf("\n\nerro na criacao\n");
+        }
+        else
+        {
+            for(i = 0; i < linhas; i++)
+            {                        
+                fprintf(arquivo,"%d ", Ids[i]);
+                        
+                fprintf(arquivo,"%s ", nomes[i]);
+                            
+                fprintf(arquivo,"%s ", emails[i]);
+                        
+                fprintf(arquivo,"%s\n", telefones[i]);
+            }
+            fecha_arquivo();
+            printf("cliente alterado\n");                
+        }
+    }
+    else if(tamanho > 1)
+    {   
+        printf("Foi encontrado mais de um cliente com a mesma informacao.\nInsira o ID do cliente que deseja excluir?\n");
+        for(i = 0; i < tamanho; i ++)
+        {
+            printf(" ID:%d - %s - %s - %s\n", Ids[resultado[i]-1], nomes[resultado[i]-1], emails[resultado[i]-1], telefones[resultado[i]-1]);
+        }
+        printf("\n\n\n\n%d\n\n\n\n", tamanho);
+        fflush(stdin);
+        scanf("%d",&escolha);
+
+        
+        for(i = 0; i < tamanho; i ++)
+        {
+            if(*escolha == Ids[resultado[i]-1])
+            {
+                j = 1;
+            }
+        }
+        while(j != 1)
+        {
+            printf("Valor invalido, insira novamente:\n");
+            fflush(stdin);
+            scanf("%d",&escolha);
+            for(i = 0; i < tamanho; i ++)
+            {
+                if(*escolha == Ids[resultado[i]-1])
+                {
+                    j = 1;
+                }
+            }
+        }
+        for(i = 0; i < linhas; i++)
+        {
+            if(Ids[i] == *escolha)
+            {
+                printf("Cliente que sera alterado: %d %s %s %s\n", Ids[i], nomes[i], emails[i], telefones[i]);
+                j = i;
+                break;
+            } 
+        }
+        printf("Qual informcao voce deseja alterar?\n");
+        printf("0- Voltar\n1- Nome\n2- Email\n3- Telefone\n");
+        fflush(stdin);
+        scanf("%d",&info);
+        switch (info)
+        {
+        case 0:
+
+            break;
+        case 1:
+            printf("Insira o novo nome:\n");
+            fflush(stdin);
+            gets(nova_info);
+            valida_nome(nova_info);
+            strcpy(nomes[j], nova_info);
+            break;
+        case 2:
+            printf("Insira o novo email:\n");
+            fflush(stdin);
+            gets(nova_info);
+            valida_email(nova_info);
+            strcpy(emails[j], nova_info);
+            break;
+        case 3:
+            printf("Insira o novo telefone:\n");
+            fflush(stdin);
+            gets(nova_info);
+            strcpy(telefones[j], nova_info);
+            break;
+        }
+        arquivo = fopen("Dados.txt", "w+");
+        if (arquivo == NULL)
+        {
+            printf("\n\nerro na criacao\n");
+        }
+        else
+        {
+            for(i = 0; i < linhas; i++)
+            {                        
+                    
+                fprintf(arquivo,"%d ", Ids[i]);
+                        
+                fprintf(arquivo,"%s ", nomes[i]);
+                            
+                fprintf(arquivo,"%s ", emails[i]);
+                        
+                fprintf(arquivo,"%s\n", telefones[i]);
+            }
+        }
+        fecha_arquivo();   
+        printf("cliente alterado\n");
+                    
+    }
+            
     libera_mem();
     fecha_arquivo();
 }
@@ -513,7 +691,7 @@ for(i = 0; i < linhas; i++)
 }
 
 
-int excluir_contato() //esta funcao nao esta funcionando.
+int excluir_contato() //rever criação arquivo aux!!!!!!!!!!!!
 {
     cria_abre();
     aloca(0);
@@ -524,7 +702,7 @@ int excluir_contato() //esta funcao nao esta funcionando.
     int i, tamanho, j;
     tamanho = 0;
 
-    printf("\nDigite o:\n 0- Voltar\n1- nome\n2- email\n3- telefone do usuário para excluir:\n");
+    printf("\nDigite:\n0- Voltar\n1- excluir por nome\n2- excluir por email\n3- excluir por telefone\n");
     fflush(stdin);
     scanf("%d", &i);
     switch (i)
@@ -533,6 +711,7 @@ int excluir_contato() //esta funcao nao esta funcionando.
         return 0;
         break;
     case 1:
+        printf("Insira o nome:\n");
         fflush(stdin);
         gets(escolha);
         *escolha = valida_nome(escolha); 
@@ -541,6 +720,7 @@ int excluir_contato() //esta funcao nao esta funcionando.
         break;
 
     case 2:
+        printf("Insira o email:\n");
         fflush(stdin);
         gets(escolha);
         *escolha = valida_email(escolha);
@@ -549,15 +729,67 @@ int excluir_contato() //esta funcao nao esta funcionando.
         break;
 
     case 3:
+        printf("Insira o telefone:\n");
         fflush(stdin);
         gets(escolha);
         resultado = busca(escolha, i, &tamanho);
         break;
     }
     fecha_arquivo();
-    if (tamanho == 0)
+
+    
+    if (tamanho == 1)
     {
-        //pergunta novamente
+        *escolha = resultado[0];
+        for(i = 0; i < linhas; i++)
+        {
+            if(Ids[i] == *escolha)
+            {
+                printf("%d %s %s %s", Ids[i], nomes[i], emails[i], telefones[i]);
+            } 
+        } 
+        arquivo_aux = fopen("Arq_auxiliar.txt", "w+");
+        if (arquivo_aux == NULL)
+        {
+            printf("\n\nerro na criacao\n");
+        }
+        else
+        {
+            for(i = 0; i < linhas; i++)
+            {                        
+                if(Ids[i] != *escolha)
+                {
+                    fprintf(arquivo_aux,"%d ", Ids[i]);
+                        
+                    fprintf(arquivo_aux,"%s ", nomes[i]);
+                            
+                    fprintf(arquivo_aux,"%s ", emails[i]);
+                        
+                    fprintf(arquivo_aux,"%s\n", telefones[i]);
+                    }
+                }
+                fecha_arquivo();
+                arquivo_aux = fopen("Arq_auxiliar.txt", "r");
+                if (arquivo_aux == NULL)
+                {
+                    printf("\n\nerro na criacao\n");
+                }
+                arquivo = fopen("Dados.txt", "w+");
+                if (arquivo == NULL)
+                {
+                    printf("\n\nerro na criacao\n");
+                }
+                else
+                {
+                    c = fgetc(arquivo_aux); 
+                    while (c != EOF) 
+                { 
+                fputc(c, arquivo); 
+                c = fgetc(arquivo_aux); 
+            }    
+            printf("cliente excluido\n");
+            }                
+        }
     }
     else if(tamanho > 1)
     {
@@ -566,8 +798,10 @@ int excluir_contato() //esta funcao nao esta funcionando.
         {
             printf(" %d - %s - %s - %s\n", Ids[resultado[i]-1], nomes[resultado[i]-1], emails[resultado[i]-1], telefones[resultado[i]-1]);
         }
+
         fflush(stdin);
         scanf("%d",&escolha);
+
         for(i = 0; i < tamanho; i ++)
         {
             if(*escolha == Ids[resultado[i]-1])
