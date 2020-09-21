@@ -3,6 +3,7 @@
 #include<stdlib.h>
 #include<unistd.h>
 
+
 //Definição de funções
 int menu();
 int adiciona();
@@ -29,6 +30,7 @@ int *Ids;
 char **nomes;
 char **emails;
 char **telefones;
+
 
 int main()
 {
@@ -64,6 +66,7 @@ int main()
     }
 }
 
+
 void cria_abre()
 {
     arquivo = fopen("Dados.txt", "a+");
@@ -72,6 +75,7 @@ void cria_abre()
         printf("\n\nerro na criação\n");
     }
 }
+
 
 int conta_linhas()
 {   
@@ -85,6 +89,7 @@ int conta_linhas()
         }
     }while(caractere != EOF);
 }
+
 
 //Copia os clientes para um array dinamicamente
 int aloca(int qnt)
@@ -130,6 +135,7 @@ int aloca(int qnt)
     }
 }
 
+
 //Ordena os clientes pelo ID de forma crescente
 int ordena()
 {
@@ -163,6 +169,7 @@ int ordena()
         }
     }
 }
+
 
 //Função para adicionar um novo cliente
 int adiciona()
@@ -284,6 +291,7 @@ int fecha_arquivo()
     fclose(arquivo_aux);
 }
 
+
 int menu ()
 {
     int escolha;
@@ -351,8 +359,6 @@ int alterar()
         break;
     }
     fecha_arquivo();
-
-    
     if (tamanho == 1)
     {
         *escolha = resultado[0];
@@ -511,13 +517,12 @@ int alterar()
             }
         }
         fecha_arquivo();   
-        printf("cliente alterado\n");
-                    
-    }
-            
+        printf("cliente alterado\n");              
+    }   
     libera_mem();
     fecha_arquivo();
 }
+
 
 //Função para printar todos os clientes cadastrados
 int lista()
@@ -544,6 +549,7 @@ int lista()
     libera_mem();
     fecha_arquivo();
 }
+
 
 //Função para buscar um cliente no array
 int *busca(char* escolha, int opcao, int* tamanho)
@@ -636,6 +642,7 @@ int *busca(char* escolha, int opcao, int* tamanho)
     }
 }
 
+
 //Função para excluir um cliente
 int excluir_contato()
 {
@@ -664,7 +671,6 @@ int excluir_contato()
         printf("escolha: %s\n", escolha);
         resultado = busca(escolha, i, &tamanho);   
         break;
-
     case 2:
         printf("Insira o email:\n");
         fflush(stdin);
@@ -673,7 +679,6 @@ int excluir_contato()
         printf("escolha: %s\n", escolha);
         resultado = busca(escolha, i, &tamanho);
         break;
-
     case 3:
         printf("Insira o telefone:\n");
         fflush(stdin);
@@ -682,8 +687,6 @@ int excluir_contato()
         break;
     }
     fecha_arquivo();
-
-    
     if (tamanho == 1)
     {
         *escolha = resultado[0];
@@ -811,6 +814,7 @@ int excluir_contato()
     fecha_arquivo();
 }
 
+
 //Função para validar o nome inserido
 char valida_nome(char* escolha)
 {
@@ -857,6 +861,7 @@ char valida_nome(char* escolha)
         valida_nome(escolha);
     }
 }
+
 
 //Função para validar o email inserido
 char valida_email(char* escolha)
@@ -908,6 +913,7 @@ char valida_email(char* escolha)
         return *escolha;
     }
 }
+
 
 //Função que libera memoria
 void libera_mem()
