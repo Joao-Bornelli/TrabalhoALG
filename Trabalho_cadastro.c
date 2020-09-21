@@ -31,7 +31,7 @@ char **nomes;
 char **emails;
 char **telefones;
 
-
+//MAIN
 int main()
 {
     int opcao = 1;
@@ -66,7 +66,7 @@ int main()
     }
 }
 
-
+//Cria o arquivo caso não exista ou abre
 void cria_abre()
 {
     arquivo = fopen("Dados.txt", "a+");
@@ -76,7 +76,7 @@ void cria_abre()
     }
 }
 
-
+//Conta a quantidade de linhas dentro do arquivo
 int conta_linhas()
 {   
     int caractere = 0;
@@ -283,7 +283,7 @@ int adiciona()
     printf("Contato adicionado com sucesso.\n");
 }
 
-
+//Função para fechar o arquivo
 int fecha_arquivo()
 {
     fflush(stdin);
@@ -291,7 +291,7 @@ int fecha_arquivo()
     fclose(arquivo_aux);
 }
 
-
+//Menu principal
 int menu ()
 {
     int escolha;
