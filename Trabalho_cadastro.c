@@ -202,6 +202,7 @@ int adiciona()
     aloca(0);
     conta_linhas();
     aloca(linhas);
+
     if(linhas > 0)
     {   
         aloca(linhas + 1);
@@ -211,7 +212,7 @@ int adiciona()
             if(Ids[i] > (Ids[i-1]+1))
             {
                 //printf("----IDS I %d----\n", Ids[i]);
-                x = 5;
+                x = i;
                 break;
             }
         }
@@ -459,12 +460,12 @@ int alterar()
     }
     else if(tamanho > 1)
     {   
-        printf("Foi encontrado mais de um cliente com a mesma informacao.\nInsira o ID do cliente que deseja excluir?\n");
+        printf("Foi encontrado mais de um cliente com a mesma informacao.\n");
         for(i = 0; i < tamanho; i ++)
         {
             printf(" ID:%d - %s - %s - %s\n", Ids[resultado[i]-1], nomes[resultado[i]-1], emails[resultado[i]-1], telefones[resultado[i]-1]);
         }
-        printf("\n\n\n\n%d\n\n\n\n", tamanho);
+        printf("Insira o ID do cliente que deseja excluir?\n");
         fflush(stdin);
         scanf("%d",&escolha);
 
